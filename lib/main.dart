@@ -5,8 +5,8 @@ import 'Pages/Home.dart';
 
 void main() {
   runApp(
-      ChangeNotifierProvider<InitState>(
-      create: (context) => InitState(), child: Main()));
+      ChangeNotifierProvider<InitialState>(
+      create: (context) => InitialState(), child: Main()));
 }
 
 
@@ -16,7 +16,9 @@ class Main  extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        brightness: Brightness.dark
+        primaryColor: Color(0xff99D6DD),
+        accentColor: Color(0xffE0131F),
+        brightness: Brightness.light
       ),
       home: Home()
     );

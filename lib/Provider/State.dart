@@ -1,6 +1,30 @@
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-class InitState extends ChangeNotifier{
+import '../Model/Model.dart';
+
+class InitialState extends ChangeNotifier{
   String baseURL = "https://pixabay.com/api/?key=15418410-7d179ad362f7065069edabf2e&pretty=true&per_page=200";
+  List<Data> list = List<Data>();
+  int count;
+
+  Future<List<Data>> getAllImages(String url) async{
+    try{
+      http.Response res = await http.get(url);
+      if(res.statusCode == 200){
+        print("Success");
+        var decoded = await jsonDecode(res.body)['hits'];
+        for(var i in decoded){
+          list.add(Data.fromJson(i));
+        }
+        print(list.length);
+        return list;
+      }
+    }catch(e){
+      print(e);
+    }
+    return null;
+  }
+
 }
