@@ -27,19 +27,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    subscribtion = Connectivity().onConnectivityChanged.listen((ConnectivityResult result){
-      print(result);
-      if(result == ConnectivityResult.none){
-        setState(() {
-          isConnected = false;
-        });
-      }
-      else if(result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
-        setState(() {
-          isConnected = true;
-        });
-      }
-    });
+    checkConnection();
     return Scaffold(
       body: isConnected ? Stack(
         children: <Widget>[
@@ -95,6 +83,18 @@ class _HomeState extends State<Home> {
   }
 
   void checkConnection(){
-
+    subscribtion = Connectivity().onConnectivityChanged.listen((ConnectivityResult result){
+      print(result);
+      if(result == ConnectivityResult.none){
+        setState(() {
+          isConnected = false;
+        });
+      }
+      else if(result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
+        setState(() {
+          isConnected = true;
+        });
+      }
+    });
   }
 }

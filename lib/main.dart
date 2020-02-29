@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Provider/State.dart';
 import 'Pages/Home.dart';
-//import 'Pages/Saved.dart';
-//import 'Pages/Search.dart';
 
 void main() {
   runApp(
