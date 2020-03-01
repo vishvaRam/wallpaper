@@ -56,24 +56,24 @@ class _GridViewWidgetState extends State<GridViewWidget> {
                     },
                   ),
                 )),
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: SizedBox(
-                    height: 45.0,
-                    width: 45.0,
-                    child: FloatingActionButton(
-                      elevation: 4.0,
-                      backgroundColor: Color(0xffEEEEEE),
-                      heroTag: null,
-                      onPressed: () {},
-                      child: Icon(
-                        Icons.add,
-                        color: Color(0xffE0131F),
-                      ),
-                    ),
-                  ),
-                )
+//                Positioned(
+//                  bottom: 8,
+//                  right: 8,
+//                  child: SizedBox(
+//                    height: 45.0,
+//                    width: 45.0,
+//                    child: FloatingActionButton(
+//                      elevation: 4.0,
+//                      backgroundColor: Color(0xffEEEEEE),
+//                      heroTag: null,
+//                      onPressed: () {},
+//                      child: Icon(
+//                        Icons.add,
+//                        color: Color(0xffE0131F),
+//                      ),
+//                    ),
+//                  ),
+//                )
               ],
             ),
           );
