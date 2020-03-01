@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../Provider/State.dart';
 import './Widget/GridViewer.dart';
 
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -60,6 +59,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 child: Text("Not connected to the internet"),
               ));
   }
+
 
   Align buildAlign(BuildContext context) {
     return Align(
