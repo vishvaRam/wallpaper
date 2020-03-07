@@ -4,7 +4,7 @@ import 'Search.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:provider/provider.dart';
 import '../Provider/State.dart';
-import './Widget/GridViewer.dart';
+import './Widget/ResultPage.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -37,21 +37,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         body: isConnected
             ? Stack(
                 children: <Widget>[
-                  Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: FutureBuilder(
-                      future: appState.getAllImages(appState.baseURL),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return GridViewWidget(appState: appState,list: snapshot.data,);
-                      },
-                    ),
-                  ),
+                  ResultPage(appState: appState),
                   buildAlign(context) // Menu
                 ],
               )
@@ -60,13 +46,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               ));
   }
 
-
-  Align buildAlign(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
+  Widget buildAlign(BuildContext context) {
+    return AnimatedAlign(
+      duration: Duration(milliseconds: 100),
+      alignment:  Alignment.bottomCenter,
       child: Container(
         width: 200.0,
-        margin: EdgeInsets.only(bottom: 30.0),
+        margin: EdgeInsets.only(bottom: 15.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(60.0),
@@ -111,7 +97,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                           MaterialPageRoute(builder: (context) => Saved()));
                     },
                     icon: Icon(
-                      Icons.bookmark,
+                      Icons.favorite_border,
                       size: 35.0,
                       color: Colors.black38,
                     ),

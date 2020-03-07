@@ -6,13 +6,16 @@ import '../../Provider/State.dart';
 import '../FullScreenImage.dart';
 
 class GridViewWidget extends StatefulWidget  {
-  const GridViewWidget({
+   GridViewWidget({
     Key key,
     @required this.appState,
-    this.list
+    this.list,
+
   }) : super(key: key);
   final List<Data> list;
   final InitialState appState;
+
+
 
   @override
   _GridViewWidgetState createState() => _GridViewWidgetState();

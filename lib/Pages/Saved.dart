@@ -12,6 +12,7 @@ class Saved extends StatelessWidget {
             Container(
               height: double.infinity,
               width: double.infinity,
+              child: Center(child: Text("Saved")),
             ),
             buildAlign(context)
           ],
@@ -23,7 +24,7 @@ class Saved extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Container(
         width: 200.0,
-        margin: EdgeInsets.only(bottom: 30.0),
+        margin: EdgeInsets.only(bottom: 15.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(60.0),
@@ -68,7 +69,7 @@ class Saved extends StatelessWidget {
                   child: IconButton(
                     onPressed: () {},
                     icon: Icon(
-                      Icons.bookmark,
+                      Icons.favorite,
                       size: 35.0,
                       color: Color(0xffE0131F),
                     ),

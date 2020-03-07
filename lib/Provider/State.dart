@@ -6,6 +6,7 @@ import '../Model/Model.dart';
 
 class InitialState extends ChangeNotifier{
   String baseURL = "https://pixabay.com/api/?key=15418410-7d179ad362f7065069edabf2e&pretty=true&per_page=200&order=latest&editors_choice=true";
+
   List<Data> list = List<Data>();
   int count;
 

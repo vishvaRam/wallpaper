@@ -5,6 +5,7 @@ import '../Model/Model.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:share/share.dart';
 
 class FullPageImage extends StatefulWidget {
   final String imgURL;
@@ -75,7 +76,7 @@ class _FullPageImageState extends State<FullPageImage> {
         duration: Duration(milliseconds: 400),
         alignment: Alignment(0, containeAlignment),
         child: Container(
-          height: 420.0,
+          height: _getheight(MediaQuery.of(context).size.height),
           width: double.infinity,
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
@@ -97,32 +98,60 @@ class _FullPageImageState extends State<FullPageImage> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+
                     // Full Container
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
+                      // Notch
                       child: firstRow(context),
                     ),
+
                     // Details
                     detailContainer(),
-                    Container(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Material(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        elevation: 6.0,
-                        child: FlatButton(
-                          splashColor: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            _launchURL("https://pixabay.com/");
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Pixabay",
-                              style: TextStyle(fontSize: 24.0),
+
+                    // Button for Pixabay
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: FlatButton(
+                            splashColor: Theme.of(context).primaryColor,
+                            onPressed: () {
+                              _launchURL(widget.dataOfImage.pageURL);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Download full size",
+                                style: TextStyle(fontSize: 16.0),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Container(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: Material(
+                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                            color: Color(0xffa1e6e3),
+                            elevation: 6.0,
+                            child: FlatButton(
+                              splashColor: Theme.of(context).primaryColor,
+                              onPressed: () {
+                                _launchURL("https://pixabay.com/");
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Pixabay",
+                                  style: TextStyle(fontSize: 24.0,color: Colors.black87),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -290,7 +319,9 @@ class _FullPageImageState extends State<FullPageImage> {
             borderRadius: BorderRadius.all(Radius.circular(50.0)),
             child: RawMaterialButton(
               splashColor: Theme.of(context).primaryColor,
-              onPressed: () {},
+              onPressed: () {
+                Share.share(widget.dataOfImage.pageURL, subject: widget.dataOfImage.user+"");
+              },
               child: Icon(Icons.share),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50.0))),
@@ -414,5 +445,14 @@ class _FullPageImageState extends State<FullPageImage> {
       imageAlignment = 0;
       containeAlignment = 5;
     });
+  }
+
+  _getheight(var height){
+    if(height <= 700){
+      return 380.0;
+    }
+    else{
+      return MediaQuery.of(context).size.height / 2 ;
+    }
   }
 }
