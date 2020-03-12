@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../Provider/State.dart';
 import './GridViewer.dart';
 
-class ResultPage extends StatelessWidget {
-  const ResultPage({
+class Result extends StatelessWidget {
+  const Result({
     Key key,
-    @required this.appState,
+    @required this.url,
+    @required this.function
   }) : super(key: key);
 
-  final InitialState appState;
+  final String url;
+  final Function function;
 
 
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<InitialState>(context);
     return Container(
       height: double.infinity,
       width: double.infinity,
       child: FutureBuilder(
-        future: appState.getAllImages(appState.baseURL),
+        future: function(url),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(

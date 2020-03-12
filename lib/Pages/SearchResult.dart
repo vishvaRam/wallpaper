@@ -1,60 +1,50 @@
 import 'package:flutter/material.dart';
-import 'Saved.dart';
-import 'Search.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:provider/provider.dart';
+import 'package:qallpaper/Pages/Widget/ResultPage.dart';
 import '../Provider/State.dart';
-import './Widget/ResultPage.dart';
+import 'Home.dart';
+import 'Saved.dart';
 
-class Home extends StatefulWidget {
+
+class ResultPage extends StatefulWidget {
+  final String url;
+  ResultPage({@required this.url});
   @override
-  _HomeState createState() => _HomeState();
+  _ResultPageState createState() => _ResultPageState();
 }
 
-class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
-  bool isConnected = true;
-  var subscribtion;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+class _ResultPageState extends State<ResultPage> {
 
   @override
   void dispose() {
-    subscribtion.cancel();
+    var appState = Provider.of<InitialState>(context);
+    appState.searchList = [];
     super.dispose();
   }
 
   @override
-  // ignore: must_call_super
   Widget build(BuildContext context) {
-    checkConnection();
     var appState = Provider.of<InitialState>(context);
-
     return Scaffold(
-        backgroundColor: Color(0xff99D6DD),
-        body: isConnected
-            ? Stack(
-                children: <Widget>[
-                  Result(url: appState.baseURL,function: appState.getAllImages,),
-                  buildAlign(context) // Menu
-                ],
-              )
-            : Center(
-                child: Text("Not connected to the internet"),
-              ));
+      backgroundColor: Color(0xff99D6DD),
+      body: Stack(
+        children: <Widget>[
+          Result(url: widget.url,function: appState.getSearchImages,),
+          buildAlign(context)
+        ],
+      ),
+    );
   }
 
-  Widget buildAlign(BuildContext context) {
-    return AnimatedAlign(
-      duration: Duration(milliseconds: 100),
-      alignment:  Alignment.bottomCenter,
+  Align buildAlign(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
       child: Container(
-        width: 200.0,
+        width: 200,
         margin: EdgeInsets.only(bottom: 15.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.white12,
           borderRadius: BorderRadius.circular(60.0),
         ),
         child: Hero(
@@ -67,25 +57,25 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Home()));
+                    },
                     icon: Icon(
                       Icons.home,
                       size: 35.0,
-                      color: Color(0xffE0131F),
+                      color: Colors.black38,
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Search()));
-                    },
+                    onPressed: () {},
                     icon: Icon(
                       Icons.search,
                       size: 35.0,
-                      color: Colors.black38,
+                      color: Color(0xffE0131F),
                     ),
                   ),
                 ),
@@ -110,26 +100,4 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       ),
     );
   }
-
-  void checkConnection() {
-    subscribtion = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      print(result);
-      if (result == ConnectivityResult.none) {
-        setState(() {
-          isConnected = false;
-        });
-      } else if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        setState(() {
-          isConnected = true;
-        });
-      }
-    });
-  }
-
-  @override
-  bool get wantKeepAlive => true;
 }
-

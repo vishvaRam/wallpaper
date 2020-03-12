@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qallpaper/Pages/SearchResult.dart';
 import 'Home.dart';
 import 'Saved.dart';
+import 'package:provider/provider.dart';
+import '../Provider/State.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -103,12 +106,6 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget buildSearchArea() {
-    return ListView(
-      children: <Widget>[Container(child: _searchBar())],
-    );
-  }
-
   Widget _searchBar() {
     return Container(
       decoration: BoxDecoration(
@@ -147,6 +144,102 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                     splashColor: Theme.of(context).accentColor,
                   )),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSearchArea() {
+    return ListView(
+      children: <Widget>[
+        Container(
+          height: 60.0,
+          child: _searchBar(),
+          padding: EdgeInsets.only(top: 6.0, left: 8.0, right: 8.0),
+        ),
+        Container(),
+        Container(
+          height: 220.0,
+          child: _searchByColor(),
+        )
+      ],
+    );
+  }
+
+  Widget _searchByColor() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            "Colors",
+            textAlign: TextAlign.start,
+            style: TextStyle(fontSize: 24.0),
+          ),
+        ),
+        Container(
+          height: 150.0,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              colorBTN(context, "Red", Colors.red),
+              colorBTN(context, "Blue", Colors.blueAccent),
+              colorBTN(context, "Green", Colors.green),
+              colorBTN(context, "Yellow", Colors.yellow),
+              colorBTN(context, "Black", Colors.black),
+              colorBTN(context, "White", Colors.white),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Padding colorBTN(BuildContext context, String title, Color color) {
+    var state = Provider.of<InitialState>(context);
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, bottom: 20.0, right: 5.0),
+      child: Material(
+        elevation: 12.0,
+        borderRadius: BorderRadius.circular(15.0),
+        shadowColor: color,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: 140.0,
+              decoration: BoxDecoration(
+                  color: color, borderRadius: BorderRadius.circular(15.0)),
+            ),
+            Positioned.fill(
+                child: Material(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.transparent,
+              child: InkWell(
+                splashColor: Colors.white70,
+                onTap: () {
+                  print(state.baseURL + state.color + title.toLowerCase());
+                  state.searchList = [];
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ResultPage(url: state.baseURL + state.color + title.toLowerCase())));
+                },
+                child: Container(
+                  child: Center(
+                      child: Text(
+                    title,
+                    style: TextStyle(
+                        fontSize: 32.0,
+                        color: color == Colors.white
+                            ? Colors.black
+                            : Colors.white),
+                  )),
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(15.0)),
+                ),
+              ),
+            )),
           ],
         ),
       ),
