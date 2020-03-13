@@ -4,6 +4,7 @@ import 'Search.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:provider/provider.dart';
 import '../Provider/State.dart';
+import '../Model/Model.dart';
 import './Widget/ResultPage.dart';
 
 class Home extends StatefulWidget {
@@ -14,9 +15,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   bool isConnected = true;
   var subscribtion;
+  Future<List<Data>> _future;
 
   @override
   void initState() {
+    var appState = Provider.of<InitialState>(context,listen: false);
+    _future = appState.getAllImages(appState.baseURL);
     super.initState();
   }
 
@@ -30,14 +34,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   // ignore: must_call_super
   Widget build(BuildContext context) {
     checkConnection();
-    var appState = Provider.of<InitialState>(context);
 
     return Scaffold(
         backgroundColor: Color(0xff99D6DD),
         body: isConnected
             ? Stack(
                 children: <Widget>[
-                  Result(url: appState.baseURL,function: appState.getAllImages,),
+                  Result(future: _future,),
                   buildAlign(context) // Menu
                 ],
               )

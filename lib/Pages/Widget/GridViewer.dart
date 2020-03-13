@@ -21,8 +21,11 @@ class GridViewWidget extends StatefulWidget  {
   _GridViewWidgetState createState() => _GridViewWidgetState();
 }
 
-class _GridViewWidgetState extends State<GridViewWidget> {
+class _GridViewWidgetState extends State<GridViewWidget> with AutomaticKeepAliveClientMixin{
+
+
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top:10.0,left: 10.0,right: 10.0),
@@ -88,4 +91,7 @@ class _GridViewWidgetState extends State<GridViewWidget> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

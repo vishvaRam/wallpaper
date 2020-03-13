@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qallpaper/Pages/Widget/ResultPage.dart';
 import '../Provider/State.dart';
+import '../Model/Model.dart';
 import 'Home.dart';
 import 'Saved.dart';
 
@@ -14,23 +15,25 @@ class ResultPage extends StatefulWidget {
 }
 
 
-class _ResultPageState extends State<ResultPage> {
+class _ResultPageState extends State<ResultPage> with AutomaticKeepAliveClientMixin{
+
+  Future<List<Data>> _future;
 
   @override
-  void dispose() {
-    var appState = Provider.of<InitialState>(context);
-    appState.searchList = [];
-    super.dispose();
+  void initState() {
+    var appState = Provider.of<InitialState>(context,listen: false);
+    _future = appState.getSearchImages(widget.url);
+    super.initState();
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
-    var appState = Provider.of<InitialState>(context);
     return Scaffold(
       backgroundColor: Color(0xff99D6DD),
       body: Stack(
         children: <Widget>[
-          Result(url: widget.url,function: appState.getSearchImages,),
+          Result(future: _future,),
           buildAlign(context)
         ],
       ),
@@ -100,4 +103,7 @@ class _ResultPageState extends State<ResultPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -5,13 +5,30 @@ import 'dart:convert';
 import '../Model/Model.dart';
 
 class InitialState extends ChangeNotifier{
-  String baseURL = "https://pixabay.com/api/?key=15418410-7d179ad362f7065069edabf2e&pretty=true&per_page=200&order=latest&editors_choice=true";
+  String baseURL = "https://pixabay.com/api/?key=15418410-7d179ad362f7065069edabf2e&pretty=true&per_page=200&order=latest&editors_choice=true&image_type=photo";
   String color = "&colors=";
+  String query = "&q=";
+  String _inputText = "";
 
   List<Data> list = List<Data>();
   List<Data> searchList = List<Data>();
 
+  List<String> recent = List<String>();
+
   int count;
+
+  void setInputText(String text){
+    _inputText = text;
+    notifyListeners();
+  }
+
+  void addTextToList(){
+      recent.add(_inputText);
+      for(var i in recent ){
+        print("from List "+i);
+      }
+      notifyListeners();
+  }
 
   Future<List<Data>> getAllImages(String url) async{
     try{

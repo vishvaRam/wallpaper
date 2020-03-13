@@ -3,25 +3,23 @@ import 'package:provider/provider.dart';
 import '../../Provider/State.dart';
 import './GridViewer.dart';
 
+// ignore: must_be_immutable
 class Result extends StatelessWidget {
-  const Result({
+   Result({
     Key key,
-    @required this.url,
-    @required this.function
+    @required this.future
   }) : super(key: key);
 
-  final String url;
-  final Function function;
-
+  var future;
 
   @override
   Widget build(BuildContext context) {
-    var appState = Provider.of<InitialState>(context);
+    var appState = Provider.of<InitialState>(context,listen: false);
     return Container(
       height: double.infinity,
       width: double.infinity,
       child: FutureBuilder(
-        future: function(url),
+        future: future,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
