@@ -26,10 +26,12 @@ class _ResultPageState extends State<ResultPage> with AutomaticKeepAliveClientMi
     super.initState();
   }
 
+
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xff99D6DD),
       body: Stack(
         children: <Widget>[

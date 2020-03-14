@@ -26,6 +26,11 @@ class Result extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+          if(snapshot.data.length ==0){
+            return Center(
+              child: Text("Images not found",style: TextStyle(fontSize: 24.0),),
+            );
+          }
           return GridViewWidget(
             appState: appState,
             list: snapshot.data,

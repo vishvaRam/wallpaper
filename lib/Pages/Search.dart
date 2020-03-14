@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qallpaper/Pages/SearchResult.dart';
@@ -13,6 +15,8 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
+  bool showRecent = true;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +34,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   // ignore: must_call_super
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: Color(0xff99D6DD),
         body: Stack(
           children: <Widget>[
@@ -130,13 +135,15 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                 onSubmitted: (text) {
                   if (text.isNotEmpty) {
                     appState.addTextToList();
+                    appState.searchList = [];
+                    appState.list = [];
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ResultPage(
                                   url: appState.baseURL +
                                       appState.query +
-                                      _controller.text,
+                                      appState.inputText,
                                 )));
                     _controller.clear();
                   }
@@ -155,8 +162,20 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                   child: IconButton(
                     icon: Icon(Icons.search, size: 24.0),
                     onPressed: () {
-                      appState.addTextToList();
-                      _controller.clear();
+                      if (_controller.text.isNotEmpty) {
+                        appState.addTextToList();
+                        appState.searchList = [];
+                        appState.list = [];
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                  url: appState.baseURL +
+                                      appState.query +
+                                      appState.inputText,
+                                )));
+                        _controller.clear();
+                      }
                     },
                     splashColor: Theme.of(context).accentColor,
                   )),
@@ -169,6 +188,27 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
 
   Widget buildSearchArea() {
     var appState = Provider.of<InitialState>(context);
+    List<String> reversed = List<String>();
+
+    if (appState.recent.length == 0) {
+      setState(() {
+        showRecent = false;
+      });
+    } else {
+      setState(() {
+        showRecent = true;
+      });
+      if(appState.recent.length<5){
+        for(int i = 0; i<appState.recent.length;i++){
+          reversed.add(appState.recent[i]);
+        }
+      }else{
+        for(int i = 0; i<4;i++){
+          reversed.add(appState.recent[i]);
+        }
+      }
+    }
+
 
     return ListView(
       children: <Widget>[
@@ -177,16 +217,67 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
           child: _searchBar(),
           padding: EdgeInsets.only(top: 6.0, left: 8.0, right: 8.0),
         ),
-        Column(
-          children: <Widget>[],
-        ),
+        showRecent == true
+            ? Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("Recent",style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87),),
+                        IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              appState.recent = [];
+                              setState(() {
+                                showRecent = false;
+                              });
+                            })
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: reversed.map((data){
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 5.0),
+                        child: Container(
+                          width: double.infinity,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: (){
+                                  appState.searchList = [];
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ResultPage(
+                                            url: appState.baseURL +
+                                                appState.query +
+                                                data,
+                                          )));
+                              },
+                              splashColor: Theme.of(context).accentColor,
+                              child: Text(data,style: TextStyle(fontSize: 20.0),),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  )
+                ],
+              )
+            : Container(),
 //        Container(
 //          height: 220.0,
 //          child: _searchByColor(),
 //        ),
         Container(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Text(
               "Category",
               style: TextStyle(
@@ -202,40 +293,26 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
   }
 
   Widget gridView() {
+    String assets = "Assets/";
     return GridView.count(
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
       children: <Widget>[
-        catagerys("Animals",
-            "https://pixabay.com/get/52e5dd4a4350ab14f6da8c7dda79367f103ad8ec5a516c4870277fd49e4cc65db0_1280.jpg"),
-        catagerys("Fruits",
-            "https://pixabay.com/get/54e2d2445753ae01f7c5d57cc62d32781c36def85254794d75267add934d_1280.jpg"),
-        catagerys("Space",
-            "https://pixabay.com/get/54e6dc464f54a514f6da8c7dda79367f103ad8ec5a516c4870277fd49e4fc55fbd_1280.jpg"),
-        catagerys("Education",
-            "https://pixabay.com/get/52e3d347435ab108f5d084609629367b1039d7ec534c704c7d2b7bdd954cc35b_1280.jpg"),
-        catagerys("Nature",
-            "https://pixabay.com/get/55e0dd414251ae14f6da8c7dda79367f103ad8ec5a516c4870277fd49e4fc659bf_1280.jpg"),
-        catagerys("Flowers",
-            "https://pixabay.com/get/55e1d1434e5bae14f6da8c7dda79367f103ad8ec5a516c4870277fd49e4fc058ba_1280.jpg"),
-        catagerys("Models",
-            "https://pixabay.com/get/54e3d3454e51a414f6da8c7dda79367f103ad8ec5a516c4870277fd49e49c45ab1_1280.jpg"),
-        catagerys("People",
-            "https://pixabay.com/get/57e8d5444f51af14f6da8c7dda79367f103ad8ec5a516c4870277fd49e4fc35bbf_1280.jpg"),
-        catagerys("Sports",
-            "https://pixabay.com/get/50e5d0404f51b108f5d084609629367b1039d7ec534c704c7d2b7bdd9545c25a_1280.jpg"),
-        catagerys("Cars",
-            "https://pixabay.com/get/50e3dc404a4fad0bffd8992cc629327b1336d7e54e507441712f72d79645c2_1280.jpg"),
-        catagerys("Bikes",
-            "https://pixabay.com/get/57e3d4404956af14f6da8c7dda79367f103ad8ec5a516c4870277fd49e4ec659b0_1280.jpg"),
-        catagerys("Mountains",
-            "https://pixabay.com/get/54e0d3474f50ae14f6da8c7dda79367f103ad8ec5a516c4870277fd49e4ec651be_1280.jpg"),
-        catagerys("Butterflies",
-            "https://pixabay.com/get/55e5d146485ab108f5d084609629367b1039d7ec534c704c7d2b7bdd9448c55c_1280.jpg"),
-        catagerys("Music",
-            "https://pixabay.com/get/55e5d5464b52a514f6da8c7dda79367f103ad8ec5a516c4870277fd49e4ecd58be_1280.jpg"),
-        catagerys("Cities",
-            "https://pixabay.com/get/50e9d5404c56b108f5d084609629367b1039d7ec534c704c7d2b7bdd934dc458_1280.jpg"),
+        catagerys("Animals", assets + "animals.jpg"),
+        catagerys("Fruits", assets + "fruits.jpg"),
+        catagerys("Space", assets + "space.jpg"),
+        catagerys("Education", assets + "education.jpg"),
+        catagerys("Nature", assets + "nature.jpg"),
+        catagerys("Flowers", assets + "flowers.jpg"),
+        catagerys("Models", assets + "model.jpg"),
+        catagerys("People", assets + "people.jpg"),
+        catagerys("Sports", assets + "sports.jpg"),
+        catagerys("Cars", assets + "cars.jpg"),
+        catagerys("Bikes", assets + "bikes.jpg"),
+        catagerys("Mountains", assets + "mountain.jpg"),
+        catagerys("Butterflies", assets + "butterfly.jpg"),
+        catagerys("Music", assets + "music.jpg"),
+        catagerys("Cities", assets + "cities.jpg"),
 //        catagerys("Baby", "https://pixabay.com/get/55e9d5464f57b108f5d084609629367b1039d7ec534c704c7d2b7bdd934ecd50_1280.jpg"),
 //        catagerys("Dogs",  "https://pixabay.com/get/55e2d2444e53aa14f6da8c7dda79367f103ad8ec5a516c4870277fd49e49c35cba_1280.jpg"),
       ],
@@ -255,8 +332,8 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
               height: MediaQuery.of(context).size.height,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: CachedNetworkImage(
-                  imageUrl: url,
+                child: Image.asset(
+                  url,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -270,7 +347,6 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
               child: InkWell(
                 splashColor: Colors.white70,
                 onTap: () {
-                  print(state.baseURL + state.color);
                   state.searchList = [];
                   Navigator.push(
                       context,
@@ -298,90 +374,89 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _searchByColor() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Text(
-            "Colors",
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 24.0),
-          ),
-        ),
-        Container(
-          height: 150.0,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              colorBTN(context, "Red", Colors.red),
-              colorBTN(context, "Blue", Colors.blueAccent),
-              colorBTN(context, "Green", Colors.green),
-              colorBTN(context, "Yellow", Colors.yellow),
-              colorBTN(context, "Black", Colors.black),
-              colorBTN(context, "White", Colors.white),
-            ],
-          ),
-        )
-      ],
-    );
-  }
+//  Widget _searchByColor() {
+//    return Column(
+//      crossAxisAlignment: CrossAxisAlignment.start,
+//      children: <Widget>[
+//        Padding(
+//          padding: const EdgeInsets.all(10.0),
+//          child: Text(
+//            "Colors",
+//            textAlign: TextAlign.start,
+//            style: TextStyle(fontSize: 24.0),
+//          ),
+//        ),
+//        Container(
+//          height: 150.0,
+//          child: ListView(
+//            scrollDirection: Axis.horizontal,
+//            children: <Widget>[
+//              colorBTN(context, "Red", Colors.red),
+//              colorBTN(context, "Blue", Colors.blueAccent),
+//              colorBTN(context, "Green", Colors.green),
+//              colorBTN(context, "Yellow", Colors.yellow),
+//              colorBTN(context, "Black", Colors.black),
+//              colorBTN(context, "White", Colors.white),
+//            ],
+//          ),
+//        )
+//      ],
+//    );
+//  }
 
-  Padding colorBTN(BuildContext context, String title, Color color) {
-    var state = Provider.of<InitialState>(context, listen: false);
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, bottom: 20.0, right: 5.0),
-      child: Material(
-        elevation: 8.0,
-        borderRadius: BorderRadius.circular(15.0),
-        shadowColor: color,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: 140.0,
-              decoration: BoxDecoration(
-                  color: color, borderRadius: BorderRadius.circular(15.0)),
-            ),
-            Positioned.fill(
-                child: Material(
-              borderRadius: BorderRadius.circular(15.0),
-              color: Colors.transparent,
-              child: InkWell(
-                splashColor: Colors.white70,
-                onTap: () {
-                  print(state.baseURL + state.color + title.toLowerCase());
-                  state.searchList = [];
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ResultPage(
-                              url: state.baseURL +
-                                  state.color +
-                                  title.toLowerCase())));
-                },
-                child: Container(
-                  child: Center(
-                      child: Text(
-                    title,
-                    style: TextStyle(
-                        fontSize: 32.0,
-                        color: color == Colors.white
-                            ? Colors.black
-                            : Colors.white),
-                  )),
-                  decoration: BoxDecoration(
-                      color: Colors.black12,
-                      borderRadius: BorderRadius.circular(15.0)),
-                ),
-              ),
-            )),
-          ],
-        ),
-      ),
-    );
-  }
+//  Padding colorBTN(BuildContext context, String title, Color color) {
+//    var state = Provider.of<InitialState>(context, listen: false);
+//    return Padding(
+//      padding: const EdgeInsets.only(left: 15.0, bottom: 20.0, right: 5.0),
+//      child: Material(
+//        elevation: 8.0,
+//        borderRadius: BorderRadius.circular(15.0),
+//        shadowColor: color,
+//        child: Stack(
+//          children: <Widget>[
+//            Container(
+//              height: MediaQuery.of(context).size.height,
+//              width: 140.0,
+//              decoration: BoxDecoration(
+//                  color: color, borderRadius: BorderRadius.circular(15.0)),
+//            ),
+//            Positioned.fill(
+//                child: Material(
+//              borderRadius: BorderRadius.circular(15.0),
+//              color: Colors.transparent,
+//              child: InkWell(
+//                splashColor: Colors.white70,
+//                onTap: () {
+//                  state.searchList = [];
+//                  Navigator.push(
+//                      context,
+//                      MaterialPageRoute(
+//                          builder: (context) => ResultPage(
+//                              url: state.baseURL +
+//
+//                                  title.toLowerCase())));
+//                },
+//                child: Container(
+//                  child: Center(
+//                      child: Text(
+//                    title,
+//                    style: TextStyle(
+//                        fontSize: 32.0,
+//                        color: color == Colors.white
+//                            ? Colors.black
+//                            : Colors.white),
+//                  )),
+//                  decoration: BoxDecoration(
+//                      color: Colors.black12,
+//                      borderRadius: BorderRadius.circular(15.0)),
+//                ),
+//              ),
+//            )),
+//          ],
+//        ),
+//      ),
+//    );
+//  }
 
   @override
   bool get wantKeepAlive => true;

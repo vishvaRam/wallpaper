@@ -6,9 +6,8 @@ import '../Model/Model.dart';
 
 class InitialState extends ChangeNotifier{
   String baseURL = "https://pixabay.com/api/?key=15418410-7d179ad362f7065069edabf2e&pretty=true&per_page=200&order=latest&editors_choice=true&image_type=photo";
-  String color = "&colors=";
   String query = "&q=";
-  String _inputText = "";
+  String inputText = "";
 
   List<Data> list = List<Data>();
   List<Data> searchList = List<Data>();
@@ -18,12 +17,12 @@ class InitialState extends ChangeNotifier{
   int count;
 
   void setInputText(String text){
-    _inputText = text;
+    inputText = text;
     notifyListeners();
   }
 
   void addTextToList(){
-      recent.add(_inputText);
+      recent.insert(0, inputText);
       for(var i in recent ){
         print("from List "+i);
       }

@@ -35,6 +35,21 @@ flutter:
   assets:
     - Assets/avatar.png
     - Assets/logo.png
+    - Assets/animals.jpg
+    - Assets/bikes.jpg
+    - Assets/butterfly.jpg
+    - Assets/cars.jpg
+    - Assets/cities.jpg
+    - Assets/education.jpg
+    - Assets/flowers.jpg
+    - Assets/fruits.jpg
+    - Assets/model.jpg
+    - Assets/mountain.jpg
+    - Assets/music.jpg
+    - Assets/nature.jpg
+    - Assets/people.jpg
+    - Assets/space.jpg
+    - Assets/sports.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
