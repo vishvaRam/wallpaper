@@ -5,6 +5,8 @@ import '../Model/Model.dart';
 import 'package:swipedetector/swipedetector.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:provider/provider.dart';
+import '../Provider/State.dart';
 import 'package:share/share.dart';
 
 class FullPageImage extends StatefulWidget {
@@ -20,6 +22,7 @@ class _FullPageImageState extends State<FullPageImage> {
   double imageAlignment = 0;
   double containeAlignment = 5;
   bool isLoading = false;
+  bool isThere = false;
 
   @override
   Widget build(BuildContext context) {
@@ -286,6 +289,7 @@ class _FullPageImageState extends State<FullPageImage> {
   }
 
   Row iconBtn(BuildContext context) {
+    var appState = Provider.of<InitialState>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -335,9 +339,15 @@ class _FullPageImageState extends State<FullPageImage> {
             color: Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(50.0)),
             child: RawMaterialButton(
-              splashColor: Theme.of(context).primaryColor,
-              onPressed: () {},
-              child: Icon(Icons.favorite_border),
+              splashColor: Theme.of(context).accentColor,
+              onPressed: () {
+                if(isThere){
+                  print("Delete");
+                }else{
+                  appState.addToFav(widget.dataOfImage);
+                }
+              },
+              child: isThere ? Icon(Icons.favorite,color: Colors.redAccent,) :Icon(Icons.favorite_border),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50.0))),
             ),
@@ -382,6 +392,7 @@ class _FullPageImageState extends State<FullPageImage> {
   }
 
   Align bottomButton() {
+    var appState = Provider.of<InitialState>(context);
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -391,6 +402,14 @@ class _FullPageImageState extends State<FullPageImage> {
           child: IconButton(
             onPressed: () {
               _setVisible();
+              for(int i = 0 ; i< appState.fav.length ;i++){
+                if(widget.dataOfImage.id == appState.fav[i].id){
+                  setState(() {
+                    isThere = true;
+                  });
+                  break;
+                }
+              }
             },
             icon: Icon(
               Icons.arrow_upward,

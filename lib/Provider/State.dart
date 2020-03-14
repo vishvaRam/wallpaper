@@ -8,13 +8,41 @@ class InitialState extends ChangeNotifier{
   String baseURL = "https://pixabay.com/api/?key=15418410-7d179ad362f7065069edabf2e&pretty=true&per_page=200&order=latest&editors_choice=true&image_type=photo";
   String query = "&q=";
   String inputText = "";
+  bool isThere = false;
 
   List<Data> list = List<Data>();
   List<Data> searchList = List<Data>();
-
+  List<Data> fav = List<Data>();
   List<String> recent = List<String>();
 
   int count;
+
+
+  void addToFav(Data data){
+
+   if(fav.length == 0){
+     fav.insert(0, data);
+     notifyListeners();
+     for(int i =0 ; i<fav.length;i++){
+       print(fav[i].largeImageURL);
+     }
+   }
+   else{
+     for(int i =0 ; i<fav.length;i++){
+       if(fav[i].id == data.id){
+        isThere = true;
+        break;
+       }
+     }
+     if(isThere == false){
+       fav.insert(0, data);
+       notifyListeners();
+       for(int i =0 ; i<fav.length;i++){
+         print(fav[i].largeImageURL);
+       }
+     }
+   }
+  }
 
   void setInputText(String text){
     inputText = text;
