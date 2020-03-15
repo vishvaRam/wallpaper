@@ -26,10 +26,19 @@ class _FullPageImageState extends State<FullPageImage> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<InitialState>(context);
     return Scaffold(
       body: SwipeDetector(
         onSwipeUp: () {
           _setVisible();
+          for(int i = 0 ; i< appState.fav.length ;i++){
+            if(widget.dataOfImage.id == appState.fav[i].id){
+              setState(() {
+                isThere = true;
+              });
+              break;
+            }
+          }
         },
         onSwipeDown: () {
           _setNotVisible();
@@ -343,7 +352,15 @@ class _FullPageImageState extends State<FullPageImage> {
               onPressed: () {
                 if(isThere){
                   print("Delete");
-                }else{
+                  setState(() {
+                    isThere = false;
+                  });
+                  appState.removeFromFav(widget.dataOfImage.id);
+                }
+                else{
+                  setState(() {
+                    isThere = true;
+                  });
                   appState.addToFav(widget.dataOfImage);
                 }
               },

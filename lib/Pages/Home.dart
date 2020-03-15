@@ -27,6 +27,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   @override
   void dispose() {
     subscribtion.cancel();
+    var appState = Provider.of<InitialState>(context,listen: false);
+    appState.list =[];
+    print("Destroid");
     super.dispose();
   }
 
@@ -50,6 +53,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   }
 
   Widget buildAlign(BuildContext context) {
+    var appState = Provider.of<InitialState>(context,listen: false);
     return AnimatedAlign(
       duration: Duration(milliseconds: 100),
       alignment:  Alignment.bottomCenter,
@@ -82,6 +86,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     onPressed: () {
+                      appState.list = [];
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Search()));
                     },
@@ -96,6 +101,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     onPressed: () {
+                      appState.list = [];
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Saved()));
                     },

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'Search.dart';
 import 'Home.dart';
+import './Widget/GridViewer.dart';
+import 'package:provider/provider.dart';
+import '../Provider/State.dart';
+
 
 class Saved extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<InitialState>(context);
     return Scaffold(
         backgroundColor: Color(0xff99D6DD),
         body: Stack(
@@ -12,7 +17,7 @@ class Saved extends StatelessWidget {
             Container(
               height: double.infinity,
               width: double.infinity,
-              child: Center(child: Text("Saved")),
+              child: appState.fav.length == 0 ? Center(child: Text("Empty",style: TextStyle(fontSize: 24.0),),):GridViewWidget(appState: appState,list: appState.fav,),
             ),
             buildAlign(context)
           ],

@@ -6,7 +6,6 @@ import 'package:qallpaper/Pages/SearchResult.dart';
 import 'Home.dart';
 import 'Saved.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../Provider/State.dart';
 
 class Search extends StatefulWidget {
@@ -134,7 +133,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                 },
                 onSubmitted: (text) {
                   if (text.isNotEmpty) {
-                    appState.addTextToList();
+
                     appState.searchList = [];
                     appState.list = [];
                     Navigator.push(
@@ -145,6 +144,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                                       appState.query +
                                       appState.inputText,
                                 )));
+                    appState.addTextToList();
                     _controller.clear();
                   }
                 },
@@ -163,7 +163,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                     icon: Icon(Icons.search, size: 24.0),
                     onPressed: () {
                       if (_controller.text.isNotEmpty) {
-                        appState.addTextToList();
+
                         appState.searchList = [];
                         appState.list = [];
                         Navigator.push(
@@ -174,6 +174,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                                       appState.query +
                                       appState.inputText,
                                 )));
+                        appState.addTextToList();
                         _controller.clear();
                       }
                     },

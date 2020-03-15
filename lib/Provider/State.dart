@@ -17,14 +17,28 @@ class InitialState extends ChangeNotifier{
 
   int count;
 
+  void removeFromFav(int item){
+    for(int i = 0; i < fav.length ; i++ ){
+      if(fav[i].id == item){
+        fav.remove(fav[i]);
+        print(fav.length);
+        print(item);
+        for(int i =0 ; i<fav.length;i++){
+          print("Item : $i :"+fav[i].largeImageURL);
+        }
+        break;
+      }
+    }
+  }
 
   void addToFav(Data data){
 
    if(fav.length == 0){
-     fav.insert(0, data);
+     fav.add(data);
      notifyListeners();
+     print(fav.length);
      for(int i =0 ; i<fav.length;i++){
-       print(fav[i].largeImageURL);
+       print("Item : $i :"+fav[i].largeImageURL);
      }
    }
    else{
@@ -35,10 +49,11 @@ class InitialState extends ChangeNotifier{
        }
      }
      if(isThere == false){
-       fav.insert(0, data);
+       fav.add(data);
+       print(fav.length);
        notifyListeners();
        for(int i =0 ; i<fav.length;i++){
-         print(fav[i].largeImageURL);
+         print("Item : $i :"+fav[i].largeImageURL);
        }
      }
    }

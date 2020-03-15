@@ -15,14 +15,11 @@ class GridViewWidget extends StatefulWidget  {
   final List<Data> list;
   final InitialState appState;
 
-
-
   @override
   _GridViewWidgetState createState() => _GridViewWidgetState();
 }
 
 class _GridViewWidgetState extends State<GridViewWidget> with AutomaticKeepAliveClientMixin{
-
 
   @override
   // ignore: must_call_super
