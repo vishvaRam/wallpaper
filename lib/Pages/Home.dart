@@ -27,9 +27,6 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   @override
   void dispose() {
     subscribtion.cancel();
-    var appState = Provider.of<InitialState>(context,listen: false);
-    appState.list =[];
-    print("Destroid");
     super.dispose();
   }
 
@@ -87,8 +84,10 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   child: IconButton(
                     onPressed: () {
                       appState.list = [];
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Search()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Search()),
+                          (Route<dynamic> route)=>false
+                      );
                     },
                     icon: Icon(
                       Icons.search,
@@ -102,8 +101,10 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   child: IconButton(
                     onPressed: () {
                       appState.list = [];
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Saved()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Saved()),
+                          (Route<dynamic> route) => false
+                      );
                     },
                     icon: Icon(
                       Icons.favorite_border,

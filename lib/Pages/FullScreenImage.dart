@@ -401,6 +401,7 @@ class _FullPageImageState extends State<FullPageImage> {
             child: Text(
               widget.dataOfImage.user,
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
             ),
           )
         ],

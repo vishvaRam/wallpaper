@@ -68,8 +68,10 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false
+                      );
                     },
                     icon: Icon(
                       Icons.home,
@@ -93,8 +95,10 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Saved()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Saved()),
+                          (Route<dynamic> route) => false
+                      );
                     },
                     icon: Icon(
                       Icons.favorite_border,

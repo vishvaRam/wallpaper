@@ -45,8 +45,10 @@ class Saved extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Home()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false
+                      );
                     },
                     icon: Icon(
                       Icons.home,
@@ -59,8 +61,10 @@ class Saved extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Search()));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Search()),
+                          (Route<dynamic> route) =>false
+                      );
                     },
                     icon: Icon(
                       Icons.search,
